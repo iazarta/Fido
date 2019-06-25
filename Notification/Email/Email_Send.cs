@@ -30,7 +30,7 @@ namespace Fido_Main.Notification.Email
   {
 
     //function to send email
-    public static void Send(string sTo, string sCC, string sFrom, string sSubject, string sBody, List<string> lGaugeAttachment, string sEmailAttachment)
+    public static void Send(Emailfields mail)
     {
       var sErrorEmail = Object_Fido_Configs.GetAsString("fido.email.erroremail", null);
       var sFidoEmail = Object_Fido_Configs.GetAsString("fido.email.fidoemail", null);
@@ -40,46 +40,57 @@ namespace Fido_Main.Notification.Email
       {
         var mMessage = new MailMessage {IsBodyHtml = true};
         
-        if (!string.IsNullOrEmpty(sTo))
+        if (!string.IsNullOrEmpty(mail.To))
         {
-          mMessage.To.Add(sTo);
+          mMessage.To.Add(mail.To);
         }
         else
         {
-          Send(sErrorEmail, "", sFidoEmail, "Fido Error", "Fido Failed: No sender specified in email.", null, null);
-        }
+            var Rmail = new Emailfields
+                {
+                           To = sErrorEmail,
+                        CC = "",
+                        From = sFidoEmail,
+                        Subject = "Fido Error", 
+                        Body = "Fido Failed: No sender specified in email.",
+                        EmailAttach = null,
+                        GaugeAttatch = null
+            };
+                    Send(Rmail); 
+                
+            }
 
-        if (!string.IsNullOrEmpty(sCC))
+        if (!string.IsNullOrEmpty(mail.CC))
         {
-          mMessage.CC.Add(sCC);
+          mMessage.CC.Add(mail.CC);
         }
-        mMessage.From = new MailAddress(sFrom);
-        mMessage.Body = sBody;
-        mMessage.Subject = sSubject; 
+        mMessage.From = new MailAddress(mail.From);
+        mMessage.Body = mail.Body;
+        mMessage.Subject = mail.Subject; 
         
-        if (lGaugeAttachment != null)
+        if (mail.GaugeAttatch != null)
         {
           if (mMessage.Body != null)
           {
             var htmlView = AlternateView.CreateAlternateViewFromString(mMessage.Body.Trim(), null, "text/html"); 
-            for (var i = 0; i < lGaugeAttachment.Count(); i++)
+            for (var i = 0; i < mail.GaugeAttatch.Count(); i++)
             {
               switch (i)
               {
                 case 0:
-                  var totalscore = new LinkedResource(lGaugeAttachment[i], "image/jpg") {ContentId = "totalscore"};
+                  var totalscore = new LinkedResource(mail.GaugeAttatch[i], "image/jpg") {ContentId = "totalscore"};
                   htmlView.LinkedResources.Add(totalscore);
                   break;
                 case 1:
-                  var userscore = new LinkedResource(lGaugeAttachment[i], "image/png") {ContentId = "userscore"};
+                  var userscore = new LinkedResource(mail.GaugeAttatch[i], "image/png") {ContentId = "userscore"};
                   htmlView.LinkedResources.Add(userscore);
                   break;
                 case 2:
-                  var machinescore = new LinkedResource(lGaugeAttachment[i], "image/png") {ContentId = "machinescore"};
+                  var machinescore = new LinkedResource(mail.GaugeAttatch[i], "image/png") {ContentId = "machinescore"};
                   htmlView.LinkedResources.Add(machinescore);
                   break;
                 case 3:
-                  var threatscore = new LinkedResource(lGaugeAttachment[i], "image/png") {ContentId = "threatscore"};
+                  var threatscore = new LinkedResource(mail.GaugeAttatch[i], "image/png") {ContentId = "threatscore"};
                   htmlView.LinkedResources.Add(threatscore);
                   break;
               }
@@ -90,9 +101,9 @@ namespace Fido_Main.Notification.Email
           }
         }
 
-        if (!string.IsNullOrEmpty(sEmailAttachment))
+        if (!string.IsNullOrEmpty(mail.EmailAttach))
         {
-          var sAttachment = new Attachment(sEmailAttachment);
+          var sAttachment = new Attachment(mail.EmailAttach);
           
           mMessage.Attachments.Add(sAttachment);
         }
@@ -109,8 +120,19 @@ namespace Fido_Main.Notification.Email
       }
       catch (Exception e)
       {
-        Send(sErrorEmail, sFidoEmail, sFidoEmail, "Fido Error", "Fido Failed: Generic error sending email." + e, null, null);
-        throw;
+        
+                var Rmail = new Emailfields
+                {
+                    To = sErrorEmail,
+                    CC = "",
+                    From = sFidoEmail,
+                    Subject = "Fido Error",
+                    Body = "Fido Failed: Generic error sending email" + e,
+                    EmailAttach = null,
+                    GaugeAttatch = null
+                };
+                Send(Rmail);
+                throw;
       }
     }
   }

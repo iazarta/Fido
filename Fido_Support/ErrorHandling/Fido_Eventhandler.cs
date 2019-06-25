@@ -39,7 +39,19 @@ namespace Fido_Main.Fido_Support.ErrorHandling
 
 
       Logging_Fido.RunLogging(sErrorMessage);
-      Email_Send.Send(sErrorEmail, sFidoEmail, sFidoEmail, sErrorSubject, sErrorMessage, null, null);
+
+            var Rmail = new Emailfields
+            {
+                To = sErrorEmail,
+                CC = "",
+                From = sFidoEmail,
+                Subject = sErrorSubject,
+                Body = sErrorMessage,
+                EmailAttach = null,
+                GaugeAttatch = null
+            };
+            Email_Send.Send(Rmail);
+
       Console.WriteLine(sErrorMessage);
       Thread.Sleep(1000);
     }

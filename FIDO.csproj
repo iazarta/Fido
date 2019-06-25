@@ -150,9 +150,11 @@
     <Compile Include="Fido_Support\Objects\ThreatGRID\Object_ThreatGRID_IP_ConfigClass.cs" />
     <Compile Include="Fido_Support\Objects\ThreatGRID\Object_ThreatGRID_Search_ConfigClass.cs" />
     <Compile Include="Main\Detectors\Detect_CarbonBlack.cs" />
+    <Compile Include="Main\Detectors\Detect_Cyphort.cs" />
     <Compile Include="Main\Detectors\Detect_Cyphort_v3.cs" />
     <Compile Include="Main\Detectors\Detect_Protectwise_v1.cs" />
     <Compile Include="Main\Detectors\Detect_SentinelOne.cs" />
+    <Compile Include="Notification\Email\Emailfields.cs" />
     <Compile Include="Notification\Notification_Helper\Notfication_Helper.cs" />
     <Compile Include="Notification\Notification_Helper\Notfication_ProtectWise_Helper.cs" />
     <Compile Include="Notification\Notification_Helper\Notification_CarbonBlack_Helper.cs" />
@@ -340,32 +342,32 @@
   <ItemGroup>
     <PublishFile Include="Microsoft.Management.Infrastructure">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.Management.Infrastructure.Native">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="System.Management.Automation">
       <Visible>False</Visible>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>

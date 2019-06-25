@@ -32,52 +32,58 @@ using Newtonsoft.Json;
 
 namespace Fido_Main.Main.Detectors
 {
-  public class Detect_Cyphort_v2
-  {
+  public class Detect_Cyphort_v2 : Detect_Cyphort
+    {
+        public Detect_Cyphort_v2()
+        {
+            
+        }
     //This function will grab the API information and build a query string.
     //Then it will assign the json return to an object. If any of the objects
     //have a value they will be sent to ParseCyphort helper function.
-    public static void GetCyphortAlerts()
-    {
-      Console.WriteLine(@"Running Cyphort v2 detector.");
-      //currently needed to bypass site without a valid cert.
-      //todo: make ssl bypass configurable
-      ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
-      ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+    //public static void GetCyphortAlerts()
+    //{
+
+
+    //  Console.WriteLine(@"Running Cyphort v2 detector.");
+    //  //currently needed to bypass site without a valid cert.
+    //  //todo: make ssl bypass configurable
+    //  ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
+    //  ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
       
-      var parseConfigs = Object_Fido_Configs.ParseDetectorConfigs("cyphortv2");
-      var request = parseConfigs.Server + parseConfigs.Query + parseConfigs.APIKey;
-      var alertRequest = (HttpWebRequest)WebRequest.Create(request);
-      alertRequest.Method = "GET";
-      try
-      {
-        using (var cyphortResponse = alertRequest.GetResponse() as HttpWebResponse)
-        {
-          if (cyphortResponse != null && cyphortResponse.StatusCode == HttpStatusCode.OK)
-          {
-            using (var respStream = cyphortResponse.GetResponseStream())
-            {
-              if (respStream == null) return;
-              var cyphortReader = new StreamReader(respStream, Encoding.UTF8);
-              var stringreturn = cyphortReader.ReadToEnd();
-              var cyphortReturn = JsonConvert.DeserializeObject<CyphortClass>(stringreturn);
-              if (cyphortReturn.correlations_array.Any() | cyphortReturn.infections_array.Any() | cyphortReturn.downloads_array.Any())
-              {
-                ParseCyphort(cyphortReturn);
-              }
-              var responseStream = cyphortResponse.GetResponseStream();
-              if (responseStream != null) responseStream.Dispose();
-              cyphortResponse.Close();
-              Console.WriteLine(@"Finished processing Cyphort detector.");
-            }
-          }
-        }
-      }
-      catch (Exception e)
-      {
-        Fido_EventHandler.SendEmail("Fido Error", "Fido Failed: {0} Exception caught in Cyphort Detector getting json:" + e);
-      }
-    }
+    //  var parseConfigs = Object_Fido_Configs.ParseDetectorConfigs("cyphortv2");
+    //  var request = parseConfigs.Server + parseConfigs.Query + parseConfigs.APIKey;
+    //  var alertRequest = (HttpWebRequest)WebRequest.Create(request);
+    //  alertRequest.Method = "GET";
+    //  try
+    //  {
+    //    using (var cyphortResponse = alertRequest.GetResponse() as HttpWebResponse)
+    //    {
+    //      if (cyphortResponse != null && cyphortResponse.StatusCode == HttpStatusCode.OK)
+    //      {
+    //        using (var respStream = cyphortResponse.GetResponseStream())
+    //        {
+    //          if (respStream == null) return;
+    //          var cyphortReader = new StreamReader(respStream, Encoding.UTF8);
+    //          var stringreturn = cyphortReader.ReadToEnd();
+    //          var cyphortReturn = JsonConvert.DeserializeObject<CyphortClass>(stringreturn);
+    //          if (cyphortReturn.correlations_array.Any() | cyphortReturn.infections_array.Any() | cyphortReturn.downloads_array.Any())
+    //          {
+    //            ParseCyphort(cyphortReturn);
+    //          }
+    //          var responseStream = cyphortResponse.GetResponseStream();
+    //          if (responseStream != null) responseStream.Dispose();
+    //          cyphortResponse.Close();
+    //          Console.WriteLine(@"Finished processing Cyphort detector.");
+    //        }
+    //      }
+    //    }
+    //  }
+    //  catch (Exception e)
+    //  {
+    //    Fido_EventHandler.SendEmail("Fido Error", "Fido Failed: {0} Exception caught in Cyphort Detector getting json:" + e);
+    //  }
+    //}
 
     //Helper function to assign important values to FidoReturnValues objects and then
     //handoff to TheDirector for FIDO processing.

@@ -32,6 +32,9 @@ using Newtonsoft.Json;
 
 namespace Fido_Main.Main.Detectors
 {
+
+  
+
     public static class Detect_Cyphort_v3
     {
         //This function will grab the API information and build a query string.
