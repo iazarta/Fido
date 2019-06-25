@@ -146,8 +146,29 @@ namespace Fido_Main.Main.Detectors
     }
   }
 
+   
   static class Sophos2FidoValues
   {
+ private static string getUsername(string[] sNewUserName )
+        {
+            var Username = string.Empty;
+
+            if (sNewUserName.Length == 1)
+            {
+                Username = sNewUserName[0];
+            }
+            else if (sNewUserName.Length > 1)
+            {
+                Username = sNewUserName[1];
+            }
+            else
+            {
+                Username = string.Empty;
+            }
+            return Username;
+        }
+
+
     //This function will attempt to assign alerts to the AntivirusReturnValues object
     //before returning it to the FidoReturnValues object.
     public static FidoReturnValues SophoslFidoValues(List<string> lHostInfo)
@@ -170,19 +191,7 @@ namespace Fido_Main.Main.Detectors
             break;
           case 3:
             lSophosReturnValues.Username = lHostInfo[3];
-            var sNewUserName = lHostInfo[3].Split('\\');
-            if (sNewUserName.Length == 1)
-            {
-              lFidoReturnValues.Username = sNewUserName[0];
-            }
-            else if (sNewUserName.Length > 1)
-            {
-              lFidoReturnValues.Username = sNewUserName[1];
-            }
-            else
-            {
-              lFidoReturnValues.Username = string.Empty;
-            }
+            lFidoReturnValues.Username = getUsername(lHostInfo[3].Split('\\'));
             break;
           case 4:
             lSophosReturnValues.Status = lHostInfo[4];
